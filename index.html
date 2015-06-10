@@ -149,10 +149,30 @@ var app = React.createElement(Nav, {color:&quot;blue&quot;});
 </section>
 
 <section>
+<h3>React Components</h3>
+<ul>
+	<li>React component classes are created with <b>React.createClass()</b></li>
+	<li><b>React.createClass()</b> takes a JavaScript object as a parameter</li>
+	<li>Object parameter must always have at least a <b>render</b> function</li>
+	<li><b>React.createClass</b> parameter can also have property fields and other special callbacks</li>
+</ul>
+<pre><code>var CommentBox = React.createClass({
+  render: function() {
+    return (
+      &lt;div className=&quot;comment&quot;&gt;
+      	&lt;h2 className=&quot;commentAuthor&quot;&gt;Arthur&lt;/h2&gt;
+      	Arthur comment text here.
+      &lt;/div&gt;
+    );
+  }
+});</code></pre>
+</section>
+
+<section>
 <h3>Data Flow</h3>
 <h4>Component Properties</h4>
 <ul>
-	<li>Properties of a React component are access through <b>this.props</b></li>
+	<li>Properties of React components are accessed through <b>this.props</b></li>
 </ul>
 
 <pre><code class="JavaScript">var Comment = React.createClass({
@@ -172,7 +192,8 @@ var app = React.createElement(Nav, {color:&quot;blue&quot;});
 </section>
 
 <section>
-<h3>Component Properties Continued</h3>
+<h4>Data Flow</h4>
+<h4>Component Properties Continued</h4>
 <pre><code class="JavaScript">var Comment = React.createClass({
   render: function() {
     return (
@@ -186,8 +207,7 @@ var app = React.createElement(Nav, {color:&quot;blue&quot;});
   }
 });
 </code></pre>
-<pre><code>	
-var CommentList = React.createClass({
+<pre><code>var CommentList = React.createClass({
   render: function() {
     return (
       &lt;div className=&quot;commentList&quot;&gt;
@@ -199,6 +219,97 @@ var CommentList = React.createClass({
 });
 </code></pre>
 
+</section>
+
+<section data-markdown>
+### Data Flow
+#### Reactive State
+* `props` are immuntable - simply passed from parent to child and 'owned' by parent
+* to implement interactions, use mutable `this.state`
+* when state changes, component re-renders itself
+</section>
+
+<section>
+<h3>Initial State - getInitialState</h3>
+<ul><li><b>getInitialState()</b> executes exactly once during the lifecycle of the component and sets up the initial state of the component</li></ul>
+<pre><code>var CommentBox = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  render: function() {
+    return (
+      &lt;div className=&quot;commentBox&quot;&gt;
+        &lt;h1&gt;Comments&lt;/h1&gt;
+        &lt;CommentList data={this.state.data} /&gt;
+        &lt;CommentForm /&gt;
+      &lt;/div&gt;
+    );
+  }
+});</code></pre>
+</section>
+
+<section>
+<h3>Initial State - componentDidMount</h3>
+<ul><li><b>componentDidMount()</b> is a method called automatically by React when a component is rendered</li></ul>
+<pre><code>var CommentBox = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  componentDidMount: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  render: function() { /* ... */ }
+});</code></pre>
+</section>
+
+<section>
+<h3>Class, State, Props - All Together</h3>
+<pre><code>var CommentBox = React.createClass({
+  loadCommentsFromServer: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState: function() {
+    return {data: []};
+  },
+  componentDidMount: function() {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  },
+  render: function() {
+    return (
+      &lt;div className=&quot;commentBox&quot;&gt;
+        &lt;h1&gt;Comments&lt;/h1&gt;
+        &lt;CommentList data={this.state.data} /&gt;
+        &lt;CommentForm /&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+
+React.render(
+  &lt;CommentBox url=&quot;comments.json&quot; pollInterval={2000} /&gt;,
+  document.getElementById('content')
+);</code></pre>
 </section>
 
 <section data-markdown>
@@ -255,10 +366,9 @@ React.render(element, document.body);
 </section>
 
 <section data-markdown>
-### Demo
+### Go Forth into the Wild Blue Yonder
 #### But First, You Should Know...
-* `class` is a reserved keyword in JSX, so use `className` instead
-* demo will use some Twitter Bootstrap; just go with it (and stay tuned for a later presentation about it)
+* `class` is a reserved keyword in JSX, so use `className` instead ()
 </section>
 
 <section>
@@ -294,6 +404,7 @@ React.render(element, document.body);
 * https://gist.github.com/wincent/598fa75e22bdfa44cf47
 * https://en.wikipedia.org/wiki/React_(JavaScript_library)
 * https://www.udemy.com/learn-and-understand-reactjs/
+* https://facebook.github.io/react/docs/tutorial.html
 </section>
 
 	
