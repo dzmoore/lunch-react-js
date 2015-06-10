@@ -368,33 +368,9 @@ React.render(element, document.body);
 <section data-markdown>
 ### Go Forth into the Wild Blue Yonder
 #### But First, You Should Know...
-* `class` is a reserved keyword in JSX, so use `className` instead ()
+* `class` is a reserved keyword in JSX, so use `className` instead 
+* Other 'JSX Gotchas': https://facebook.github.io/react/docs/jsx-gotchas.html
 </section>
-
-<section>
-<h3>Demo</h3>
-<h4>Hello World</h4>
-<pre><code class="JavaScript">&lt;div class=&quot;container&quot;&gt;&lt;/div&gt;
-&lt;script type=&quot;text/jsx&quot;&gt;
-
-  var HelloWorld = React.createClass({
-    render: function() {
-      return (
-        &lt;button className=&quot;btn btn-primary&quot; type=&quot;button&quot;&gt;
-          Hello &lt;span className=&quot;badge&quot;&gt;World&lt;/span&gt;
-        &lt;/button&gt;
-      );
-    }
-  });
-
-  var element = React.createElement(HelloWorld);
-
-  React.render(element, document.querySelector('.container'));
-</code></pre>
-</section>
-
-
-
 
 <section data-markdown>
 ### References
